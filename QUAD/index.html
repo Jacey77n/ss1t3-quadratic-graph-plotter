@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jason Nwaeze Graph Plotter</title>
+    <link rel="stylesheet" href="style.css">
+	<link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <script src="js/three.js"></script>
+	<script>
+		/*
+	ensure that the values placed in the textboxes are valid numbers
+	*/
+	function validateInput(thecontrol){
+		drawGraph();
+	}
+	/*
+	draw the graph
+	*/
+	function drawGraph() {
+		/*
+		retrieve the user values from the textboxes
+		*/
+		const lowerboundx = document.getElementById("lowerboundx").value*1;
+		const upperboundx = document.getElementById("upperboundx").value*1;
+		const coeffx2 = document.getElementById("coeffx2").value*1;
+		const coeffx = document.getElementById("coeffx").value*1;
+		const constant = document.getElementById("constant").value*1;
+		/*
+		specify the width and height of the plot area
+		*/
+		canvasWidth = "800px";
+		canvasHeight = "500px";
+		/*
+		create the plot area 'canvas' if it does not exist.
+		*/
+		canvas = document.getElementById("glCanvas");
+		if(canvas==null){
+			const element = document.getElementById("graphlocation");
+			canvas = document.createElement("canvas");
+			canvas.setAttribute("id","glCanvas");
+			canvas.setAttribute("width",canvasWidth);
+			canvas.setAttribute("height",canvasHeight);
+			//const canvas = document.querySelector("#glCanvas");
+			element.appendChild(canvas);
+		}
+		/*
+		Initialize the GL context. The GL context is necessary for drawing on a web page.
+		*/
+		const gl = canvas.getContext("webgl");
+
+		/*
+		what to do if the GL context is not supported
+		*/
+		if (gl == null) {
+			alert("Unable to initialize WebGL. Your browser or machine may not support it.");
+			return;
+		}
+		// Set clear color to black, fully opaque
+		gl.clearColor(0.0, 0.0, 0.0, 1.0);
+		// Clear the color buffer with specified clear color
+		gl.clear(gl.COLOR_BUFFER_BIT);
+		
+		//const renderer = new THREE.WebGLRenderer();
+		const renderer = new THREE.WebGLRenderer(gl);
+		
+		//renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer.setSize( canvas.width, canvas.height);
+		//document.body.appendChild( renderer.domElement );
+
+		//const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 500 );
+		const camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 500 );
+		//camera.position.set( 0, 0, 100 );
+		camera.position.set( 0, 0, 200 );
+		camera.lookAt( 0, 0, 0 );
+
+		const scene = new THREE.Scene();
+		
+		/*
+		generate table of values, yvalues and yvaluesbs
+		yvaluesbs is for bubble sort to determine max and min y
+		*/
+		const n0xvalues = upperboundx-lowerboundx+1;
+		const yvalues = [n0xvalues];
+		const yvaluesbs = [n0xvalues];
+		/*
+		y = Ax2 + Bx + C
+		tov = table of values
+		*/
+		
+		const tov = document.getElementById("tov");
+		table = document.getElementById("tovdisplay");
+		if(table !=null){
+			table.remove();
+		}
+		table = document.createElement("table");
+		table.setAttribute("id","tovdisplay");
+		row = document.createElement("tr");
+		lcell = document.createElement("td");
+		lcell.setAttribute("class","tovlcell tovcellh");
+		lcell.appendChild(document.createTextNode("x"));
+		row.appendChild(lcell);
+		rcell = document.createElement("td");
+		rcell.setAttribute("class","tovrcell tovcellh");
+		rcell.appendChild(document.createTextNode("y"));
+		row.appendChild(rcell);
+		table.appendChild(row);
+		//tov.appendChild(element);
+		i=0;
+		for (x = lowerboundx; x <= upperboundx; x++) {
+			y = coeffx2*(x**2)+(coeffx*x)+constant;
+		  	yvalues[i] = y;
+			yvaluesbs[i] = y;
+			row = document.createElement("tr");
+			lcell = document.createElement("td");
+			lcell.setAttribute("class","tovlcell");
+			lcell.appendChild(document.createTextNode(x));
+			row.appendChild(lcell);
+			rcell = document.createElement("td");
+			rcell.setAttribute("class","tovrcell");
+			rcell.appendChild(document.createTextNode(y));
+			row.appendChild(rcell);
+			table.appendChild(row);
+			i=i+1;
+		}
+		tov.appendChild(table);
+		/*
+		bubble sort
+		*/
+		for (i = 0; i<n0xvalues-1;i++){
+        	for(j=i+1;j<n0xvalues;j++){
+            	if(yvaluesbs[i] > yvaluesbs[j]){
+                	temp = yvaluesbs[i];
+                	yvaluesbs[i] = yvaluesbs[j];
+                	yvaluesbs[j] = temp;
+				}
+			}
+		}
+		/*
+		draw y-axis
+		create a blue LineBasicMaterial
+		*/
+		material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+		points = [];
+		points.push( new THREE.Vector3( 0, yvaluesbs[n0xvalues-1], 0 ) );
+		points.push( new THREE.Vector3( 0, yvaluesbs[0], 0 ) );
+		geometry = new THREE.BufferGeometry().setFromPoints( points );
+		line = new THREE.Line( geometry, material );
+		scene.add( line );
+		renderer.render( scene, camera );
+		
+		/*
+		draw x-axis
+		*/
+		points = [];
+		points.push( new THREE.Vector3( lowerboundx, 0, 0 ) );
+		points.push( new THREE.Vector3( upperboundx, 0, 0 ) );
+		geometry = new THREE.BufferGeometry().setFromPoints( points );
+		line = new THREE.Line( geometry, material );
+		scene.add( line );
+		renderer.render( scene, camera );
+		/*
+		draw graph
+		*/
+		points = [];
+		for (x = lowerboundx; x<upperboundx;x++){
+        	y1=coeffx2*(x**2)+coeffx*x+constant;
+			y2=coeffx2*((x+1)**2)+coeffx*(x+1)+constant;
+			points.push( new THREE.Vector3( x, y1, 0 ) );
+			points.push( new THREE.Vector3( x+1, y2, 0 ) );
+			geometry = new THREE.BufferGeometry().setFromPoints( points );
+			line = new THREE.Line( geometry, material );
+			scene.add( line );
+			renderer.render( scene, camera );
+		}
+	}
+	
+	</script>
+</head>
+<body>
+	<div id="pageHeader">
+	<span id="logoHolder">
+			<img id="logo" src="logo2.png"/>
+		</span>
+		<span id="headerText">The Quadratic Graph Plotter . . .</span>
+	</div>
+<!--AD1-->
+	<div class="ad">
+		<a target="_blank" href="https://practice.geeksforgeeks.org/courses/advanced-html-self-paced?utm_source=gfg&utm_medium=in-article&utm_campaign=HTML">
+			<img class="ad_course_banner" src="https://media.geeksforgeeks.org/wp-content/post-ads-banner/2022-05-25-15-50-53-image(1).png" alt="">
+		</a>
+	</div>
+
+    <!--Controls-->
+    <div id="controls">
+		<span style="padding-right:0.1em">lower bound x</span>
+		<input id="lowerboundx" class="nInput" type="text" value="-10" onChange="validateInput(this)"/>
+		<input id="upperboundx" style="margin-left:0.2em" class="nInput" type="text" value="10" onChange="validateInput(this)"/>
+		<span style="padding-left:0.2em;padding-right:0.1em">upper bound x</span>
+		<span style="padding-right:0.1em">|</span>
+		<span style="padding-right:0.1em">A</span>
+		<input id="coeffx2" class="nInput" type="text" value="0" onChange="validateInput(this)"/>
+		<span style="padding-left:0.2em;padding-right:0.1em">B</span>
+		<input  id="coeffx" style="margin-left:0.2em" class="nInput" type="text" value="0" onChange="validateInput(this)"/>
+		<span style="padding-left:0.2em;padding-right:0.1em">C</span>
+		<input id="constant" style="margin-left:0.2em" class="nInput" type="text" value="0" onChange="validateInput(this)"/>
+	</div>
+	<div>
+		<table>
+			<tr>
+				<td id="graphlocation"></td>
+				<td id="rightsidegraph">
+					<p 
+
+class="subheading">Table of Values</p>
+					<span 
+
+id="tov"></span></td>
+			</tr>
+		</table>
+</div>
+
+    <!--AD2-->
+	<div class="ad">
+		<div class="banner">
+			<div class="shopping-image">
+				<img src="https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1952&q=80" alt="shopping">
+			</div>
+			
+			<div class="text">
+				<h4>
+					<a target="_blank" href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwilj9ntzJ75AhWKzncKHfIDAWQYABAAGgJlZg&ae=2&ohost=www.google.com&cid=CAESa-D2oEpO4tH1KQQ0P1LCQ4i46w3SWVGHhxt0ed-FhZxjW4LJnCb3qU_WCvGNl4x-S4q7BZgXulX5ObuKyxWTuGihn3_y-abm0a08M66bBJ1tNfGxLnanp_NzuMLMNpw_gA4Gxng22Go795Di&sig=AOD64_22Az_wDduWAtKqRcEVb9dR9bLGlQ&q&adurl&ved=2ahUKEwjJ-tHtzJ75AhWDvaQKHSXNDZ8Q0Qx6BAgEEAE">Holiday Supersale, Jumia is your number one online shopping site in Nigeria. We are an online store where you can purchase all your electronics and books.<br> Click Now</a>
+				</h4>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+
+	

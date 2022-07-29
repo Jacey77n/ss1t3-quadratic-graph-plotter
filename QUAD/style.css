@@ -1,0 +1,208 @@
+.ad_course_banner{
+    -webkit-text-size-adjust: 100%;
+    --font-sofia: sofia-pro, sans-serif;
+    --font-din: "urw-din",sans-serif;
+    --transition-time: 0.4s;
+    --color-gfg: #308D46;
+    --color-black: #273239;
+    --color-blue: #2C3E50;
+    --gfg-body-color: white;
+    --gfg-tint-color: white;
+    --gfg-selected-color: #ececec;
+    --gfg-title-color: #121212;
+    --gfg-subtitle-color: #121212;
+    --gfg-tags-color: #989898;
+    --gfg-text-color: #989898;
+    --gfg-color-lg: #6d6d6d;
+    --gfg-grey-bg: #F9F9F9;
+    --gfg-darkgrey: #ebebeb;
+    --gfg-light-bg: #D7EFEE;
+    --gfg-tags-base-color: #308D46;
+    --color-gfg-bg: rgba(48, 141, 70, 0.1);
+    --gfg-wrapper-bg: #FAFAFA;
+    --gfg-footer-text-color: #696969;
+    --color-gfg-alternate: #308D46;
+    --gfg-green-white: #308D46;
+    --search-bg-color: #d2d2d2;
+    --gfg-lightbg-color: rgba(235, 235, 235, 0.67);
+    --gfg-body-color-alternate: #F0F0F0;
+    --gfg-head-shadow: #1111112b;
+    --scroller-color: #B6B6B6;
+    --faded-green: #E8F6EEB3;
+    --navy-blue-to-white: #0F2B3C;
+    --black-to-white: #000000;
+    --lightblue-to-lightblack: #EFF8F3;
+    --white-to-lightgrey: white;
+    --white-to-lightblack: white;
+    --primary-10: #AED2B8;
+    --gfg-primary: #2F8D46;
+    --gfg-secondary: #0F2B3C;
+    --font-section-head: 27.5pt;
+    --font-section-subhead: 14pt;
+    --font-article-head: 14pt;
+    --font-article-subtext: 12pt;
+    --font-article-text: 10pt;
+    --font-article-tags: 10pt;
+    --font-w-article-head: 600;
+    --font-w-article-text: 400;
+    --image-grid: url(https://media.geeksforgeeks.org/auth-dashboard-uploads/is3_20210803.svg.svg);
+    text-rendering: optimizeLegibility;
+    text-align: left !important;
+    line-height: 1.67;
+    font-family: var(--font-din);
+    letter-spacing: 0.01rem;
+    word-break: break-word;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    border: 0;
+    height: unset !important;
+    color: #0f2b3c !important;
+    font-weight: 600;
+    margin-bottom: 0 !important;
+    max-width: 100%;
+    max-height: 300px;
+    width: auto;
+}
+
+/* CSS Document */
+#pageHeader{
+	background: #D40E12;
+}
+#logoHolder {
+	vertical-align: top;
+}
+#headerText{
+	vertical-align: top;
+	font-size:3em;
+	color:#B4CADF;
+	font-family:inherit; 
+	font-style: italic;
+}
+#controls{
+	padding-top: 0.3em;
+	font-family:inherit;
+	color:#908989;
+	font-size: 1em;
+	display: flex;
+	align-items: center;
+	background-color: #ffffff;
+}
+/*number input*/
+.nInput{
+	width:2em;
+	height:2em;
+	border-style:none;
+	background:#414141;
+	color:#ffffff;
+	font-family:inherit;
+	vertical-align:middle;
+	text-align:center;
+}
+#graphlocation{
+	vertical-align: top;
+	margin-top: 0em;
+	padding-top: 0em;
+}
+#rightsidegraph{
+	vertical-align: top;
+	margin-top: 0em;
+	padding-top: 0em;
+}
+#tov{
+	vertical-align: top;
+	overflow-y: scroll;
+	height: 30em;
+	display: block;
+}
+.subheading{
+	color:#B4CADF;
+	background:#F7F7F7;
+	margin-top: 0em;
+	margin-bottom: 0em;
+	padding-top: 0em;
+	vertical-align: top;
+	font-family: inherit;
+}
+.tovlcell{
+	margin:0em;
+	padding:0em;
+	padding-right:0.2em;
+	vertical-align:top;
+	text-align:right;
+	border-right-width: 0.1em;
+	border-right-color:#D8D8D8;
+	border-right-style: solid;
+}
+.tovrcell{
+	margin:0em;
+	padding:0.em;
+	padding-left:0.2em;
+	vertical-align:top;
+	text-align:left;
+}
+.tovcellh{
+	border-bottom-width: 0.1em;
+	border-bottom-color:#D8D8D8;
+	border-bottom-style: solid;
+}
+.banner {
+    width: 57%;
+    background: red;
+    height: 5em;
+    overflow: hidden;
+    display: flex;
+    justify-content: flex-start;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    border-radius: 0.3em;
+  }
+  .banner:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px 10px rgba(0, 0, 0, 0.55);
+  }
+  
+  .shopping-image {
+    height: auto;
+    width: 10em;
+  }
+  .shopping-image > img {
+    height: 5em;
+    width: 10em;
+    -o-object-fit: cover;
+       object-fit: cover;
+    border-radius: 0 2em 2em 0/0 3em 3em 0;
+    box-shadow: 3px 5px 1px 3px #990000;
+  }
+  
+  .text {
+    height: 5em;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+  .text > * {
+    font-size: 15px;
+    text-align: center;
+  }
+  
+  h4 a {
+    text-decoration: none;
+  }
+  
+  a {
+    color: #fff;
+  }/*# sourceMappingURL=test.css.map */
+  .ad{
+    margin: 0;
+  padding: 0;
+  display: flex;
+  /*justify-content: center;*/
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  }
